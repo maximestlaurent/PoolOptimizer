@@ -233,6 +233,28 @@ namespace Pool_Optimizer.UI
                 goaltenders = _dataSource.Goaltenders.Where(g => g.Available == true).ToList();
             }
 
+            //// 6 groups: leftWings, centers, rightWings, defensemen1, defensemen2, goaltenders
+            //List<List<Player>> groups = new List<List<Player>>();
+            //groups.Add(leftWings);
+            //groups.Add(centers);
+            //groups.Add(rightWings);
+            //groups.Add(defensemen1);
+            //groups.Add(defensemen2);
+            //groups.Add(goaltenders);
+
+
+            //Dictionary<double, int> playersDictionary = new Dictionary<double, int>();
+            //foreach (Player player in groups.ElementAt(0))
+            //{
+            //    if (player.Salary > salaryCap) continue;
+
+            //    int currentPoints = playersDictionary[player.Salary];
+            //    if (player.Points > currentPoints)
+            //    {
+            //        playersDictionary[player.Salary] = player.Points;
+            //    }
+            //}
+
             foreach (Player leftWing in leftWings)
             {
                 foreach (Player center in centers)
