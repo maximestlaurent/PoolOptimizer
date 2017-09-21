@@ -299,8 +299,7 @@ namespace Pool_Optimizer.UI
 
         private void PickPlayer(Player player, Button btnLockIn, Button btnUnavailable)
         {
-            player.Picked = true;
-            player.Available = false;
+            player.Status = PlayerStatus.PICKED;
 
             btnLockIn.Text = "Unpick";
             btnUnavailable.Enabled = false;
@@ -308,8 +307,7 @@ namespace Pool_Optimizer.UI
 
         private void UnpickPlayer(Player player, Button btnLockIn, Button btnUnavailable)
         {
-            player.Picked = false;
-            player.Available = true;
+            player.Status = PlayerStatus.AVAILABLE;
 
             btnLockIn.Text = "Pick";
             btnUnavailable.Enabled = true;
@@ -317,8 +315,7 @@ namespace Pool_Optimizer.UI
 
         private void MakePlayerUnavailable(Player player, Button btnLockIn, Button btnUnavailable)
         {
-            player.Picked = false;
-            player.Available = false;
+            player.Status = PlayerStatus.UNAVAILABLE;
 
             this.DisplayOptimalRoster();
         }

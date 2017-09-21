@@ -50,7 +50,7 @@
     <IntermediateOutputPath>C:\Users\Saint\AppData\Local\Temp\vs4F3B.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>3BF45F136A6AEB4F091A49A566754BCEEDFF342F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>3EF941F017CEB3C145CC0794B59710C3FCBE310A</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>Pool Optimizer_TemporaryKey.pfx</ManifestKeyFile>
@@ -98,8 +98,6 @@
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Data\2014 Draft.csv" />
-    <None Include="Data\2015 Draft.csv" />
     <None Include="Pool Optimizer_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -115,6 +113,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\" />
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <ItemGroup>

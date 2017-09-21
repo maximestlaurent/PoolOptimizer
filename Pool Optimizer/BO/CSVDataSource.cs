@@ -49,11 +49,12 @@ namespace Pool_Optimizer.BO
                 {
                     string[] data = line.Split(splitter);
                     Player player = new Player();
-                    player.Name = data[1];
+                    player.Name = data[0];
+                    String position = data[1];
+                    player.TeamAccroynym = data[2];
                     player.Points = Int32.Parse(data[3]);
                     player.Salary = Double.Parse(data[4]);
 
-                    String position = data[2];
                     switch (position)
                     {
                         case "LW":
