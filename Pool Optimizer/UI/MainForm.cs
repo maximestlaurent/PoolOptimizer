@@ -177,7 +177,7 @@ namespace Pool_Optimizer.UI
             List<Player> defensemen2 = new List<Player>();
             List<Player> goaltenders = new List<Player>();
 
-            double salaryCap = (double)nudSalaryCap.Value;
+            double salaryCap = (double)nudSalaryCap.Value * 1000000;
 
             if (_roster != null && _roster.LeftWing != null && _roster.LeftWing.Picked)
             {
@@ -233,61 +233,114 @@ namespace Pool_Optimizer.UI
                 goaltenders = _dataSource.Goaltenders.Where(g => g.Available == true).ToList();
             }
 
-            //// 6 groups: leftWings, centers, rightWings, defensemen1, defensemen2, goaltenders
-            //List<List<Player>> groups = new List<List<Player>>();
-            //groups.Add(leftWings);
-            //groups.Add(centers);
-            //groups.Add(rightWings);
-            //groups.Add(defensemen1);
-            //groups.Add(defensemen2);
-            //groups.Add(goaltenders);
+            // Based on exemple given here: https://stackoverflow.com/questions/29729609/knapsack-with-selection-from-distinct-groups
 
+            // 6 groups: leftWings, centers, rightWings, defensemen1, defensemen2, goaltenders
+            List<List<Player>> groups = new List<List<Player>>();
+            groups.Add(leftWings);
+            groups.Add(centers);
+            groups.Add(rightWings);
+            groups.Add(defensemen1);
+            groups.Add(defensemen2);
+            groups.Add(goaltenders);
 
-            //Dictionary<double, int> playersDictionary = new Dictionary<double, int>();
+            List<List<double>> weights = groups.Select(g => g.Select(p => p.Salary).ToList()).ToList();
+            List<List<int>> values = groups.Select(g => g.Select(p => p.Points).ToList()).ToList();
+            List<List<Player>> players = groups.Select(g => g.Select(p => p).ToList()).ToList();
+            double maxWeight = salaryCap;
+
+            Dictionary<double, int> lastPoints = new Dictionary<double, int>();
+            Dictionary<double, Player> lastPlayers = new Dictionary<double, Player>();
+            for (int i = 0; i < weights.ElementAt(0).Count; ++i)
+            {
+                if (weights[0][i] > maxWeight) continue;
+
+                Player lastPlayer = null;
+                lastPlayers.TryGetValue(weights[0][i], out lastPlayer);
+
+                Player currentPlayer = players[0][i];
+
+                if (lastPlayer == null || lastPlayer.Points < currentPlayer.Points)
+                {
+                    lastPoints[weights[0][i]] = values[0][i];
+                    lastPlayers[weights[0][i]] = currentPlayer;
+                }
+            }
+
+            Dictionary<double, int> current = new Dictionary<double, int>();
+            for (int i = 1; i < weights.Count; ++i)
+            {
+                for (int j = 0; j < weights[i].Count; ++j)
+                {
+                    for (double k = weights[i][j]; k <= maxWeight; ++k)
+                    {
+                        current[k] = Math.Max(current[k], lastPoints[k - weights[i][j]] + values[i][j]);
+                    }
+                }
+
+                Swap<Dictionary<double, int>>(ref current, ref lastPoints);
+            }
+
+            int maxPoints = lastPoints.Values.Max();
+            double maxSalary = lastPoints.FirstOrDefault(x => x.Value == maxPoints).Key;
+
+            
             //foreach (Player player in groups.ElementAt(0))
             //{
             //    if (player.Salary > salaryCap) continue;
 
-            //    int currentPoints = playersDictionary[player.Salary];
-            //    if (player.Points > currentPoints)
+            //    if (player.Points > lastPoints[player.Salary])
             //    {
-            //        playersDictionary[player.Salary] = player.Points;
+            //        lastPlayers[player.Salary] = player;
+            //        lastPoints[player.Salary] = player.Points;
             //    }
             //}
 
-            foreach (Player leftWing in leftWings)
-            {
-                foreach (Player center in centers)
-                {
-                    foreach (Player rightWing in rightWings)
-                    {
-                        foreach (Player defenseman1 in defensemen1)
-                        {
-                            foreach (Player defenseman2 in defensemen2)
-                            {
-                                if (defenseman1.Name != defenseman2.Name)
-                                {
-                                    foreach (Player goaltender in goaltenders)
-                                    {
-                                        Roster roster = new Roster();
-                                        roster.LeftWing = leftWing;
-                                        roster.Center = center;
-                                        roster.RightWing = rightWing;
-                                        roster.Defenseman1 = defenseman1;
-                                        roster.Defenseman2 = defenseman2;
-                                        roster.Goaltender = goaltender;
+            //int numberOfGroups = 6;
+            //Dictionary<double, Player> currentPlayers = new Dictionary<double, Player>();
+            //Dictionary<double, int> currentPoints = new Dictionary<double, int>();
+            //// Start with group index 1, because we've already done group index 0
+            //for (int i = 1; i < numberOfGroups; i++)
+            //{
+            //    foreach(Player player in groups.ElementAt(i))
+            //    {
+            //        currentPoints[player.Salary] = Math.Max(currentPoints[playerSalary], lastPoints)
+            //    }
+            //}
 
-                                        if (roster.Salary <= salaryCap && (bestRoster == null || roster.Points > bestRoster.Points))
-                                        {
-                                            bestRoster = roster;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //foreach (Player leftWing in leftWings)
+            //{
+            //    foreach (Player center in centers)
+            //    {
+            //        foreach (Player rightWing in rightWings)
+            //        {
+            //            foreach (Player defenseman1 in defensemen1)
+            //            {
+            //                foreach (Player defenseman2 in defensemen2)
+            //                {
+            //                    if (defenseman1.Name != defenseman2.Name)
+            //                    {
+            //                        foreach (Player goaltender in goaltenders)
+            //                        {
+            //                            Roster roster = new Roster();
+            //                            roster.LeftWing = leftWing;
+            //                            roster.Center = center;
+            //                            roster.RightWing = rightWing;
+            //                            roster.Defenseman1 = defenseman1;
+            //                            roster.Defenseman2 = defenseman2;
+            //                            roster.Goaltender = goaltender;
+
+            //                            if (roster.Salary <= salaryCap && (bestRoster == null || roster.Points > bestRoster.Points))
+            //                            {
+            //                                bestRoster = roster;
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             return bestRoster;
         }
@@ -351,6 +404,13 @@ namespace Pool_Optimizer.UI
 
         //    this.DisplayOptimalRoster();
         //}
+
+        private void Swap<T>(ref T left, ref T right)
+        {
+            T temp = left;
+            left = right;
+            right = temp;
+        }
 
         #endregion
     }
