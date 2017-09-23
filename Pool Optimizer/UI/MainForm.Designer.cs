@@ -1,4 +1,6 @@
-﻿namespace Pool_Optimizer.UI {
+﻿using System;
+
+namespace Pool_Optimizer.UI {
     partial class MainForm {
         /// <summary>
         /// Required designer variable.
@@ -53,13 +55,13 @@
             this.btnGLockIn = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.pnlRoster = new System.Windows.Forms.Panel();
-            this.pnlLoading = new System.Windows.Forms.Panel();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.nudSalaryCap = new System.Windows.Forms.NumericUpDown();
+            this.btnAvailable = new System.Windows.Forms.Button();
+            this.dgvUnavailablePlayers = new System.Windows.Forms.DataGridView();
             this.label11 = new System.Windows.Forms.Label();
+            this.nudSalaryCap = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
             this.pnlRoster.SuspendLayout();
-            this.pnlLoading.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUnavailablePlayers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSalaryCap)).BeginInit();
             this.SuspendLayout();
             // 
@@ -321,7 +323,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(260, 240);
+            this.btnReset.Location = new System.Drawing.Point(15, 278);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 28;
@@ -331,10 +333,11 @@
             // 
             // pnlRoster
             // 
+            this.pnlRoster.Controls.Add(this.btnAvailable);
+            this.pnlRoster.Controls.Add(this.dgvUnavailablePlayers);
             this.pnlRoster.Controls.Add(this.label11);
             this.pnlRoster.Controls.Add(this.nudSalaryCap);
             this.pnlRoster.Controls.Add(this.label10);
-            this.pnlRoster.Controls.Add(this.pnlLoading);
             this.pnlRoster.Controls.Add(this.label1);
             this.pnlRoster.Controls.Add(this.btnReset);
             this.pnlRoster.Controls.Add(this.label2);
@@ -367,35 +370,40 @@
             this.pnlRoster.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRoster.Location = new System.Drawing.Point(0, 0);
             this.pnlRoster.Name = "pnlRoster";
-            this.pnlRoster.Size = new System.Drawing.Size(562, 291);
+            this.pnlRoster.Size = new System.Drawing.Size(562, 631);
             this.pnlRoster.TabIndex = 29;
-            this.pnlRoster.Visible = false;
             // 
-            // pnlLoading
+            // btnAvailable
             // 
-            this.pnlLoading.Controls.Add(this.label9);
-            this.pnlLoading.Location = new System.Drawing.Point(469, 221);
-            this.pnlLoading.Name = "pnlLoading";
-            this.pnlLoading.Size = new System.Drawing.Size(562, 291);
-            this.pnlLoading.TabIndex = 29;
+            this.btnAvailable.Location = new System.Drawing.Point(474, 278);
+            this.btnAvailable.Name = "btnAvailable";
+            this.btnAvailable.Size = new System.Drawing.Size(75, 23);
+            this.btnAvailable.TabIndex = 35;
+            this.btnAvailable.Text = "Available";
+            this.btnAvailable.UseVisualStyleBackColor = true;
+            this.btnAvailable.Click += new System.EventHandler(this.btnAvailable_Click);
             // 
-            // label9
+            // dgvUnavailablePlayers
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(241, 123);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(54, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "Loading...";
+            this.dgvUnavailablePlayers.AllowUserToAddRows = false;
+            this.dgvUnavailablePlayers.AllowUserToDeleteRows = false;
+            this.dgvUnavailablePlayers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvUnavailablePlayers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUnavailablePlayers.Location = new System.Drawing.Point(15, 307);
+            this.dgvUnavailablePlayers.Name = "dgvUnavailablePlayers";
+            this.dgvUnavailablePlayers.ReadOnly = true;
+            this.dgvUnavailablePlayers.Size = new System.Drawing.Size(534, 312);
+            this.dgvUnavailablePlayers.TabIndex = 34;
             // 
-            // label10
+            // label11
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(12, 245);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(60, 13);
-            this.label10.TabIndex = 31;
-            this.label10.Text = "Salary cap:";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(152, 243);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(22, 13);
+            this.label11.TabIndex = 33;
+            this.label11.Text = "M$";
             // 
             // nudSalaryCap
             // 
@@ -409,28 +417,27 @@
             0,
             0});
             // 
-            // label11
+            // label10
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(152, 243);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(22, 13);
-            this.label11.TabIndex = 33;
-            this.label11.Text = "M$";
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(12, 245);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(60, 13);
+            this.label10.TabIndex = 31;
+            this.label10.Text = "Salary cap:";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 291);
+            this.ClientSize = new System.Drawing.Size(562, 631);
             this.Controls.Add(this.pnlRoster);
             this.Name = "MainForm";
-            this.Text = "Pool Optimizer 2014";
+            this.Text = "Pool Optimizer 2017";
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.pnlRoster.ResumeLayout(false);
             this.pnlRoster.PerformLayout();
-            this.pnlLoading.ResumeLayout(false);
-            this.pnlLoading.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUnavailablePlayers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSalaryCap)).EndInit();
             this.ResumeLayout(false);
 
@@ -468,12 +475,11 @@
         private System.Windows.Forms.Button btnGLockIn;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Panel pnlRoster;
-        private System.Windows.Forms.Panel pnlLoading;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown nudSalaryCap;
         private System.Windows.Forms.Label label10;
-
+        private System.Windows.Forms.DataGridView dgvUnavailablePlayers;
+        private System.Windows.Forms.Button btnAvailable;
     }
 }
 

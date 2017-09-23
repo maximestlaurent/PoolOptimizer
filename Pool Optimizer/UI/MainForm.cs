@@ -18,10 +18,12 @@ namespace Pool_Optimizer.UI
 
         CSVDataSource _dataSource;
         Roster _roster;
+        BindingList<Player> _unavailablePlayers = new BindingList<Player>();
 
         #endregion
 
         #region Constructors
+
         public MainForm()
         {
             InitializeComponent();
@@ -32,6 +34,9 @@ namespace Pool_Optimizer.UI
             {
                 string dataPath = openFileDialog.FileName;
                 CreateDataSource(dataPath);
+                CreateDataGridView();
+
+                BringToFront();
             }
             else
             {
@@ -46,7 +51,6 @@ namespace Pool_Optimizer.UI
         private void MainForm_Shown(object sender, EventArgs e)
         {
             this.DisplayOptimalRoster();
-            this.ShowRosterPanel();
         }
 
         private void btnLWLockIn_Click(object sender, EventArgs e)
@@ -156,6 +160,15 @@ namespace Pool_Optimizer.UI
             this.DisplayOptimalRoster();
         }
 
+        private void btnAvailable_Click(object sender, EventArgs e)
+        {
+            foreach(DataGridViewRow row in dgvUnavailablePlayers.SelectedRows)
+            {
+                Player player = (Player) row.DataBoundItem;
+                this.MakePlayerAvailable(player);
+            }
+        }
+
         #endregion
 
         #region Private methods
@@ -164,6 +177,45 @@ namespace Pool_Optimizer.UI
         {
             this._dataSource = new CSVDataSource(dataPath);
             this._dataSource.Populate();
+        }
+
+        private void CreateDataGridView()
+        {
+            dgvUnavailablePlayers.AutoGenerateColumns = false;
+            dgvUnavailablePlayers.AllowUserToAddRows = false;
+            dgvUnavailablePlayers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvUnavailablePlayers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvUnavailablePlayers.DataSource = _unavailablePlayers;
+
+            DataGridViewTextBoxColumn nameColumn = new DataGridViewTextBoxColumn();
+            nameColumn.Name = "Name";
+            nameColumn.HeaderText = "Name";
+            nameColumn.DataPropertyName = "Name";
+            dgvUnavailablePlayers.Columns.Add(nameColumn);
+
+            DataGridViewTextBoxColumn positionColumn = new DataGridViewTextBoxColumn();
+            positionColumn.Name = "Position";
+            positionColumn.HeaderText = "Position";
+            positionColumn.DataPropertyName = "Position";
+            dgvUnavailablePlayers.Columns.Add(positionColumn);
+
+            DataGridViewTextBoxColumn teamColumn = new DataGridViewTextBoxColumn();
+            teamColumn.Name = "Team";
+            teamColumn.HeaderText = "Team";
+            teamColumn.DataPropertyName = "Team";
+            dgvUnavailablePlayers.Columns.Add(teamColumn);
+
+            DataGridViewTextBoxColumn pointsColumn = new DataGridViewTextBoxColumn();
+            pointsColumn.Name = "Points";
+            pointsColumn.HeaderText = "Points";
+            pointsColumn.DataPropertyName = "Points";
+            dgvUnavailablePlayers.Columns.Add(pointsColumn);
+
+            DataGridViewTextBoxColumn salaryColumn = new DataGridViewTextBoxColumn();
+            salaryColumn.Name = "Salary";
+            salaryColumn.HeaderText = "Salary";
+            salaryColumn.DataPropertyName = "Salary";
+            dgvUnavailablePlayers.Columns.Add(salaryColumn);
         }
 
         private Roster GetOptimalRoster()
@@ -310,18 +362,6 @@ namespace Pool_Optimizer.UI
             txtSalary.Text = this._roster.Salary / 1000000 + "M$";
         }
 
-        private void ShowRosterPanel()
-        {
-            pnlRoster.Visible = true;
-            pnlLoading.Visible = false;
-        }
-
-        private void ShowLoadingPanel()
-        {
-            pnlLoading.Visible = true;
-            pnlRoster.Visible = false;
-        }
-
         private void PickPlayer(Player player, Button btnLockIn, Button btnUnavailable)
         {
             player.Status = PlayerStatus.PICKED;
@@ -341,25 +381,17 @@ namespace Pool_Optimizer.UI
         private void MakePlayerUnavailable(Player player, Button btnLockIn, Button btnUnavailable)
         {
             player.Status = PlayerStatus.UNAVAILABLE;
+            _unavailablePlayers.Add(player);
 
             this.DisplayOptimalRoster();
         }
 
-        //private void MakePlayerAvailable(Player player, Button btnLockIn, Button btnUnavailable) {
-        //    player.Picked = false;
-        //    player.Available = true;
-
-        //    btnLockIn.Enabled = true;
-        //    btnUnavailable.Text = "Unavailable";
-
-        //    this.DisplayOptimalRoster();
-        //}
-
-        private void Swap<T>(ref T left, ref T right)
+        private void MakePlayerAvailable(Player player)
         {
-            T temp = left;
-            left = right;
-            right = temp;
+            player.Status = PlayerStatus.AVAILABLE;
+            _unavailablePlayers.Remove(player);
+
+            this.DisplayOptimalRoster();
         }
 
         #endregion
