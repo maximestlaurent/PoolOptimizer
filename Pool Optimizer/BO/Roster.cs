@@ -27,6 +27,21 @@ namespace Pool_Optimizer.BO {
             }
         }
 
+        public List<Player> Players
+        {
+            get
+            {
+                List<Player> players = new List<Player>();
+                if (LeftWing != null) players.Add(LeftWing);
+                if (Center != null) players.Add(Center);
+                if (RightWing != null) players.Add(RightWing);
+                if (Defenseman1 != null) players.Add(Defenseman1);
+                if (Defenseman2 != null) players.Add(Defenseman2);
+                if (Goaltender != null) players.Add(Goaltender);
+                return players;
+            }
+        }
+
         #endregion
     }
 }

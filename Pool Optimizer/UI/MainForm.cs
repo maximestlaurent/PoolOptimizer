@@ -185,7 +185,7 @@ namespace Pool_Optimizer.UI
             }
             else
             {
-                leftWings = _dataSource.LeftWings.Where(lw => lw.Available == true).ToList();
+                leftWings = _dataSource.LeftWings.Where(lw => lw.Available == true).OrderByDescending(p => p.Points).ToList();
             }
 
             if (_roster != null && _roster.Center != null && _roster.Center.Picked)
@@ -194,7 +194,7 @@ namespace Pool_Optimizer.UI
             }
             else
             {
-                centers = _dataSource.Centers.Where(c => c.Available == true).ToList();
+                centers = _dataSource.Centers.Where(c => c.Available == true).OrderByDescending(p => p.Points).ToList();
             }
 
             if (_roster != null && _roster.RightWing != null && _roster.RightWing.Picked)
@@ -203,7 +203,7 @@ namespace Pool_Optimizer.UI
             }
             else
             {
-                rightWings = _dataSource.RightWings.Where(rw => rw.Available == true).ToList();
+                rightWings = _dataSource.RightWings.Where(rw => rw.Available == true).OrderByDescending(p => p.Points).ToList();
             }
 
             if (_roster != null && _roster.Defenseman1 != null && _roster.Defenseman1.Picked)
@@ -212,7 +212,7 @@ namespace Pool_Optimizer.UI
             }
             else
             {
-                defensemen1 = _dataSource.Defensemen.Where(d1 => d1.Available == true).ToList();
+                defensemen1 = _dataSource.Defensemen.Where(d1 => d1.Available == true).OrderByDescending(p => p.Points).ToList();
             }
 
             if (_roster != null && _roster.Defenseman2 != null && _roster.Defenseman2.Picked)
@@ -221,7 +221,7 @@ namespace Pool_Optimizer.UI
             }
             else
             {
-                defensemen2 = _dataSource.Defensemen.Where(d2 => d2.Available == true).ToList();
+                defensemen2 = _dataSource.Defensemen.Where(d2 => d2.Available == true).OrderByDescending(p => p.Points).ToList();
             }
 
             if (_roster != null && _roster.Goaltender != null && _roster.Goaltender.Picked)
@@ -230,117 +230,67 @@ namespace Pool_Optimizer.UI
             }
             else
             {
-                goaltenders = _dataSource.Goaltenders.Where(g => g.Available == true).ToList();
+                goaltenders = _dataSource.Goaltenders.Where(g => g.Available == true).OrderByDescending(p => p.Points).ToList();
             }
 
-            // Based on exemple given here: https://stackoverflow.com/questions/29729609/knapsack-with-selection-from-distinct-groups
+            int iLW = 0;
+            int iC = 0;
+            int iRW = 0;
+            int iD1 = 0;
+            int iD2 = 1;
+            int iG = 0;
 
-            // 6 groups: leftWings, centers, rightWings, defensemen1, defensemen2, goaltenders
-            List<List<Player>> groups = new List<List<Player>>();
-            groups.Add(leftWings);
-            groups.Add(centers);
-            groups.Add(rightWings);
-            groups.Add(defensemen1);
-            groups.Add(defensemen2);
-            groups.Add(goaltenders);
-
-            List<List<double>> weights = groups.Select(g => g.Select(p => p.Salary).ToList()).ToList();
-            List<List<int>> values = groups.Select(g => g.Select(p => p.Points).ToList()).ToList();
-            List<List<Player>> players = groups.Select(g => g.Select(p => p).ToList()).ToList();
-            double maxWeight = salaryCap;
-
-            Dictionary<double, int> lastPoints = new Dictionary<double, int>();
-            Dictionary<double, Player> lastPlayers = new Dictionary<double, Player>();
-            for (int i = 0; i < weights.ElementAt(0).Count; ++i)
+            while (bestRoster == null)
             {
-                if (weights[0][i] > maxWeight) continue;
+                Roster currentRoster = new Roster();
+                currentRoster.LeftWing = leftWings.ElementAtOrDefault(iLW);
+                currentRoster.Center = centers.ElementAtOrDefault(iC);
+                currentRoster.RightWing = rightWings.ElementAtOrDefault(iRW);
+                currentRoster.Defenseman1 = defensemen1.ElementAtOrDefault(iD1);
+                currentRoster.Defenseman2 = defensemen2.ElementAtOrDefault(iD2);
+                currentRoster.Goaltender = goaltenders.ElementAtOrDefault(iG);
 
-                Player lastPlayer = null;
-                lastPlayers.TryGetValue(weights[0][i], out lastPlayer);
-
-                Player currentPlayer = players[0][i];
-
-                if (lastPlayer == null || lastPlayer.Points < currentPlayer.Points)
+                if (currentRoster.Salary < salaryCap)
                 {
-                    lastPoints[weights[0][i]] = values[0][i];
-                    lastPlayers[weights[0][i]] = currentPlayer;
+                    bestRoster = currentRoster;
                 }
-            }
-
-            Dictionary<double, int> current = new Dictionary<double, int>();
-            for (int i = 1; i < weights.Count; ++i)
-            {
-                for (int j = 0; j < weights[i].Count; ++j)
+                else
                 {
-                    for (double k = weights[i][j]; k <= maxWeight; ++k)
+                    Player playerToChange = currentRoster.Players.Min(p => p);
+                    if (playerToChange == currentRoster.LeftWing)
                     {
-                        current[k] = Math.Max(current[k], lastPoints[k - weights[i][j]] + values[i][j]);
+                        iLW++;
+                    }
+                    else if (playerToChange == currentRoster.Center)
+                    {
+                        iC++;
+                    }
+                    else if (playerToChange == currentRoster.RightWing)
+                    {
+                        iRW++;
+                    }
+                    else if (playerToChange == currentRoster.Defenseman1)
+                    {
+                        iD1++;
+                        if (iD1 == iD2)
+                        {
+                            iD1++;
+                        }
+                    }
+                    else if (playerToChange == currentRoster.Defenseman2)
+                    {
+                        iD2++;
+                        if (iD1 == iD2)
+                        {
+                            iD2++;
+                        }
+                    }
+                    else if (playerToChange == currentRoster.Goaltender)
+                    {
+                        iG++;
                     }
                 }
-
-                Swap<Dictionary<double, int>>(ref current, ref lastPoints);
             }
-
-            int maxPoints = lastPoints.Values.Max();
-            double maxSalary = lastPoints.FirstOrDefault(x => x.Value == maxPoints).Key;
-
-            
-            //foreach (Player player in groups.ElementAt(0))
-            //{
-            //    if (player.Salary > salaryCap) continue;
-
-            //    if (player.Points > lastPoints[player.Salary])
-            //    {
-            //        lastPlayers[player.Salary] = player;
-            //        lastPoints[player.Salary] = player.Points;
-            //    }
-            //}
-
-            //int numberOfGroups = 6;
-            //Dictionary<double, Player> currentPlayers = new Dictionary<double, Player>();
-            //Dictionary<double, int> currentPoints = new Dictionary<double, int>();
-            //// Start with group index 1, because we've already done group index 0
-            //for (int i = 1; i < numberOfGroups; i++)
-            //{
-            //    foreach(Player player in groups.ElementAt(i))
-            //    {
-            //        currentPoints[player.Salary] = Math.Max(currentPoints[playerSalary], lastPoints)
-            //    }
-            //}
-
-            //foreach (Player leftWing in leftWings)
-            //{
-            //    foreach (Player center in centers)
-            //    {
-            //        foreach (Player rightWing in rightWings)
-            //        {
-            //            foreach (Player defenseman1 in defensemen1)
-            //            {
-            //                foreach (Player defenseman2 in defensemen2)
-            //                {
-            //                    if (defenseman1.Name != defenseman2.Name)
-            //                    {
-            //                        foreach (Player goaltender in goaltenders)
-            //                        {
-            //                            Roster roster = new Roster();
-            //                            roster.LeftWing = leftWing;
-            //                            roster.Center = center;
-            //                            roster.RightWing = rightWing;
-            //                            roster.Defenseman1 = defenseman1;
-            //                            roster.Defenseman2 = defenseman2;
-            //                            roster.Goaltender = goaltender;
-
-            //                            if (roster.Salary <= salaryCap && (bestRoster == null || roster.Points > bestRoster.Points))
-            //                            {
-            //                                bestRoster = roster;
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
 
             return bestRoster;
         }
@@ -357,7 +307,7 @@ namespace Pool_Optimizer.UI
             txtG.Text = this._roster.Goaltender.ToString();
 
             txtPoints.Text = this._roster.Points + " pts";
-            txtSalary.Text = this._roster.Salary + "M$";
+            txtSalary.Text = this._roster.Salary / 1000000 + "M$";
         }
 
         private void ShowRosterPanel()

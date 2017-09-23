@@ -64,7 +64,7 @@ Mikael Granlund;RW;MIN;62;5750000
 Jordan Eberle;RW;NYI;62;6000000
 Craig Anderson;G;OTT;62;4200000
 Jonathan Toews;C;CHI;60;10500000
-Erik Karlsson;D;OTT (INJ.);60;6500000
+Erik Karlsson (INJ);D;OTT;60;6500000
 Alexander Radulov;RW;DAL;60;6250000
 Taylor Hall;LW;NJD;60;6000000
 Jake Guentzel;C;PIT;60;734167
@@ -131,7 +131,7 @@ Kyle Palmieri;RW;NJD;52;4650000
 Chris Kreider;LW;NYR;52;4625000
 Conor Sheary;LW;PIT;52;3000000
 Ondrej Palat;LW;TBL;52;5300000
-James Neal;LW;VGK (INJ.);52;5000000
+James Neal;LW;VGK;52;5000000
 Patrick Marleau;C;TOR;51;6250000
 Nick Foligno;LW;CBJ;50;5500000
 Matthew Tkachuk;LW;CGY;50;925000
@@ -142,14 +142,14 @@ Alex Pietrangelo;D;STL;50;6500000
 Ryan Strome;C;EDM;50;2500000
 Vincent Trocheck;C;FLA;50;4750000
 Charlie Coyle;C;MIN;50;3200000
-Zach Parise;LW;MIN (INJ.);50;7538462
+Zach Parise (INJ);LW;MIN;50;7538462
 Nico Hischier;C;NJD;50;925000
 Henrik Sedin;C;VAN;50;7000000
 Clayton Keller;C;ARI;49;885833
 Dustin Byfuglien;D;WPG;49;7600000
 P.K. Subban;D;NSH;49;9000000
 Joshua Ho-Sang;RW;NYI;49;863333
-Patric Hornqvist;RW;PIT (INJ.);49;4250000
+Patric Hornqvist (INJ);RW;PIT;49;4250000
 Artem Anisimov;C;CHI;48;4550000
 Oscar Klefbom;D;EDM;48;4167000
 Jaroslav Halak;G;NYI;48;4500000
@@ -180,7 +180,7 @@ Robby Fabbri;C;STL;46;894167
 Brayden Point;C;TBL;46;686667
 Marc-Andre Fleury;G;VGK;46;5750000
 Patrick Eaves;RW;ANA;45;3150000
-Ryan Kesler;C;ANA (INJ.);45;6875000
+Ryan Kesler;C;ANA;45;6875000
 Evander Kane;LW;BUF;45;5250000
 Justin Williams;RW;CAR;45;4500000
 Jordan Staal;C;CAR;45;6000000
@@ -195,7 +195,7 @@ Ryan Nugent-Hopkins;C;EDM;45;6000000
 Brendan Gallagher;RW;MTL;45;3750000
 Adam Henrique;C;NJD;45;4000000
 Mathew Barzal;C;NYI;45;863333
-Derick Brassard;C;OTT (INJ.);45;5000000
+Derick Brassard;C;OTT;45;5000000
 Nolan Patrick;C;PHI;45;925000
 Paul Stastny;C;STL;45;7000000
 Sam Gagner;C;VAN;45;3150000
@@ -212,7 +212,7 @@ Jakub Vrana;LW;WSH;44;863333
 Dylan Strome;C;ARI;43;863333
 Anthony Duclair;LW;ARI;43;1200000
 Alex DeBrincat;RW;CHI;43;778333
-Martin Hanzal;C;DAL (INJ.);43;4750000
+Martin Hanzal;C;DAL;43;4750000
 Jussi Jokinen;LW;EDM;43;1100000
 Jason Zucker;LW;MIN;43;2000000
 Phillip Danault;LW;MTL;43;912500
@@ -237,7 +237,7 @@ Frans Nielsen;C;DET;41;5250000
 Craig Smith;RW;NSH;41;4250000
 Timo Meier;RW;SJS;41;894167
 David Backes;RW;BOS;40;6000000
-Brandon Dubinsky;C;CBJ (INJ.);40;5850000
+Brandon Dubinsky (INJ);C;CBJ;40;5850000
 Spencer Foo;RW;CGY;40;925000
 Sam Bennett;C;CGY;40;1950000
 Keith Yandle;D;FLA;40;6350000
